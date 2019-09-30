@@ -27,21 +27,13 @@ int vetunique(int vet[8], int numerros)
     else
         return 0;// caso contrário é um vetor válido
 }
-uint8_t **error_injector(uint8_t vet_error_hex[5],int num_erros,int Lin, int Col)
+void error_injector(uint8_t *matrix_error,int num_erros,int Lin, int Col)
 {
     int num[8] = {99,99,99,99,99,99,99,99};
     int tentativa=0;
     int L=Lin,C=Col;
-    uint8_t **matrix_error;
+   // uint8_t **matrix_error;
     uint8_t posError = 0;
-    uint8_t posError2 = 0;
-    uint8_t posError3 = 0;
-    uint8_t posError4 = 0;
-    uint8_t posError5 = 0;
-    uint8_t posError6 = 0;
-    uint8_t posError7 = 0;
-    uint8_t posError8 = 0;
-    uint8_t errorSum = 0;
     short testCount = 0;
     short errorNumber;
     int vectorLenght;
@@ -58,12 +50,11 @@ uint8_t **error_injector(uint8_t vet_error_hex[5],int num_erros,int Lin, int Col
     int vp8[5]={-1,-C,-(C+1),(C-1),C};
     int i,j;
 
-    matrix_error=(int **) malloc(L * sizeof(int *));
     for(i=0;i<L;i++)
     {
-        matrix_error[i]=(int *) malloc(C * sizeof(int));
         for(j=0;j<C;j++)
-            matrix_error[i][j]=0;
+            //matrix_error[i][j]=0;
+            *(matrix_error + i*L + j) = 0;
     }
     /*for(i=0;i<L;i++)
     {
@@ -429,7 +420,8 @@ uint8_t **error_injector(uint8_t vet_error_hex[5],int num_erros,int Lin, int Col
     */
     for(i=0;i<num_erros;i++)
     {
-        matrix_error[num[i]/C][num[i]%C]=1;
+        //matrix_error[num[i]/C][num[i]%C]=1;
+        *(matrix_error + (num[i]/C)*L + (num[i]%C)) = 1;
     }
    /* for(i=0;i<L;i++)
     {
@@ -442,5 +434,5 @@ uint8_t **error_injector(uint8_t vet_error_hex[5],int num_erros,int Lin, int Col
         vet_error_hex[i]=128*matrix_error[i][0] + 64*matrix_error[i][1] + 32*matrix_error[i][2] + 16*matrix_error[i][3] + 8*matrix_error[i][4] + 4*matrix_error[i][5] + 2*matrix_error[i][6] + 1*matrix_error[i][7];
         printf("%x ",vet_error_hex[i]);
     }*/
-    return matrix_error;
+   // return matrix_error;
 }

@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "hammingex.h"
- uint8_t **matnew;
+ uint8_t   matnew[4][8];
  uint8_t   matriz[4][8];
 
  uint8_t vet_error_hex[5]={0,0,0,0,0};
@@ -77,7 +77,7 @@ answer HAMM_encode(uint16_t mensagemOriginal, ECCRam* RAM_Mem_ECC){
                      printf("\n");
              }
 */
-        matnew=error_injector(vet_error_hex,5,4,8);
+        error_injector(&matnew,5,4,8);
        printf("Matriz de IE:\n");
         for(i=0;i<4;i++)
           {
@@ -93,8 +93,6 @@ answer HAMM_encode(uint16_t mensagemOriginal, ECCRam* RAM_Mem_ECC){
                     if(matnew[i][j]==1)
                         intervcod[i][j]=(!(intervcod[i][j]));
             }
-
-        free(matnew);
   /*     printf("Matriz final: \n");
           for(i=0;i<4;i++)
             {
