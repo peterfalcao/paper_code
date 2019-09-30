@@ -3,10 +3,10 @@
 //
 
 #include "func_EI.h"
+uint8_t **matnew;
 int vetunique(int vet[8], int numerros)
 {
     int i=0,j=0,count_distintos=0,num_distintos=0;
-
     for(i=0;i<numerros;i++)
     {
         for(j=0;j<numerros;j++)
@@ -27,13 +27,21 @@ int vetunique(int vet[8], int numerros)
     else
         return 0;// caso contrário é um vetor válido
 }
-void error_injector(uint8_t *matrix_error,int num_erros,int Lin, int Col)
+void error_injector(uint8_t vet_error_hex[5],int num_erros,int Lin, int Col,uint8_t **matrix_error)
 {
     int num[8] = {99,99,99,99,99,99,99,99};
     int tentativa=0;
     int L=Lin,C=Col;
    // uint8_t **matrix_error;
     uint8_t posError = 0;
+    uint8_t posError2 = 0;
+    uint8_t posError3 = 0;
+    uint8_t posError4 = 0;
+    uint8_t posError5 = 0;
+    uint8_t posError6 = 0;
+    uint8_t posError7 = 0;
+    uint8_t posError8 = 0;
+    uint8_t errorSum = 0;
     short testCount = 0;
     short errorNumber;
     int vectorLenght;
@@ -50,12 +58,7 @@ void error_injector(uint8_t *matrix_error,int num_erros,int Lin, int Col)
     int vp8[5]={-1,-C,-(C+1),(C-1),C};
     int i,j;
 
-    for(i=0;i<L;i++)
-    {
-        for(j=0;j<C;j++)
-            //matrix_error[i][j]=0;
-            *(matrix_error + i*L + j) = 0;
-    }
+
     /*for(i=0;i<L;i++)
     {
         for(j=0;j<C;j++)
@@ -71,6 +74,13 @@ void error_injector(uint8_t *matrix_error,int num_erros,int Lin, int Col)
     //16 17 18 19 20 21 22 23
     //24 25 26 27 28 29 30 31
     //32 33 34 35 36 37 38 39
+
+    for( i=0;i<4;i++)
+    {
+        for(j=0;j<8;j++)
+            *(*(matrix_error + i)+ j) = 0;
+    }
+
     errorNumber=num_erros;
     while(testCount<1)
     {
@@ -418,11 +428,26 @@ void error_injector(uint8_t *matrix_error,int num_erros,int Lin, int Col)
         for(j=0;j<C;j++)
             matrix_error[i][j]=0;
     */
+    //for(i=0;i<num_erros;i++) printf("%d - ",num[i]);
+    j = 0;
+    int p;
+    int l;
     for(i=0;i<num_erros;i++)
     {
-        //matrix_error[num[i]/C][num[i]%C]=1;
-        *(matrix_error + (num[i]/C)*L + (num[i]%C)) = 1;
+        p = (num[i]/C);
+        l = (num[i]%C);
+       *(*(matrix_error + p)+ l) = 1;
     }
+
+
+    for( i=0;i<4;i++)
+    {
+        for(j=0;j<8;j++)
+            printf ("%d", *(*(matrix_error + i)+ j) );
+            printf("\n");
+    }
+
+
    /* for(i=0;i<L;i++)
     {
         for(j=0;j<C;j++)
@@ -434,5 +459,6 @@ void error_injector(uint8_t *matrix_error,int num_erros,int Lin, int Col)
         vet_error_hex[i]=128*matrix_error[i][0] + 64*matrix_error[i][1] + 32*matrix_error[i][2] + 16*matrix_error[i][3] + 8*matrix_error[i][4] + 4*matrix_error[i][5] + 2*matrix_error[i][6] + 1*matrix_error[i][7];
         printf("%x ",vet_error_hex[i]);
     }*/
-   // return matrix_error;
+    //matnew=matrix_error;
+    //free(matrix_error);
 }

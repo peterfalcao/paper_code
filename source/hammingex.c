@@ -11,11 +11,10 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "hammingex.h"
- uint8_t   matnew[4][8];
  uint8_t   matriz[4][8];
 
  uint8_t vet_error_hex[5]={0,0,0,0,0};
-answer HAMM_encode(uint16_t mensagemOriginal, ECCRam* RAM_Mem_ECC){
+answer HAMM_encode(uint16_t mensagemOriginal, ECCRam* RAM_Mem_ECC, uint8_t **matnew){
     answer status;
     /* int par[4][4],i,j;
     int cod[4][8];
@@ -77,22 +76,24 @@ answer HAMM_encode(uint16_t mensagemOriginal, ECCRam* RAM_Mem_ECC){
                      printf("\n");
              }
 */
-        error_injector(&matnew,5,4,8);
+       error_injector(vet_error_hex,5,4,8,matnew);
        printf("Matriz de IE:\n");
-        for(i=0;i<4;i++)
+       /* for(i=0;i<4;i++)
           {
               for(j=0;j<8;j++)
                   printf("%d",matnew[i][j]);
                   printf("\n");
 
           }
-
+*/
         for(i=0;i<4;i++)
             {
                 for(j=0;j<8;j++)
                     if(matnew[i][j]==1)
                         intervcod[i][j]=(!(intervcod[i][j]));
             }
+        //free(intervcod);
+
   /*     printf("Matriz final: \n");
           for(i=0;i<4;i++)
             {
@@ -105,6 +106,7 @@ answer HAMM_encode(uint16_t mensagemOriginal, ECCRam* RAM_Mem_ECC){
             mensagemCodificada[i]=128*intervcod[i][0] + 64*intervcod[i][1] + 32*intervcod[i][2] + 16*intervcod[i][3] + 8*intervcod[i][4] + 4*intervcod[i][5] + 2*intervcod[i][6] + 1*intervcod[i][7];
         // DADO QUE SERÁ SALVO NA MEMÓRIA
         mensagemCodificadaFinal=mensagemCodificada[0]<<24 | mensagemCodificada[1]<<16 | mensagemCodificada[2]<<8 | mensagemCodificada[3];
+
         status = write_ram_cel(&RAM_Mem_ECC->RAM_cel0, mensagemCodificada[0]);
         status = write_ram_cel(&RAM_Mem_ECC->RAM_cel1, mensagemCodificada[1]);
         status = write_ram_cel(&RAM_Mem_ECC->RAM_cel2, mensagemCodificada[2]);

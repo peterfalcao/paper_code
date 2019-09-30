@@ -13,11 +13,27 @@ void main(void){
    uint16_t dadoOriginal=0xCAFE;
    uint16_t dadoLido;
    int i=0,cnt_sucess=0,cnt_fail=0;
+   int j = 0;
+   uint8_t **matrix_error;
+   uint8_t *matrix_lines;
+   uint8_t cols;
+
+   matrix_lines = &cols;
+   matrix_error = &matrix_lines;
    /*
     * 0x05d6 -> 0x0C58DE6B
     * 0x5134 -> 0x58193745
     */
-   for(i=0;i<12;i++)
+      matrix_error=(int **) malloc(4 * sizeof(int *));
+      for( i=0;i<4;i++)
+      {
+          matrix_error[i]=(int *) malloc(8 * sizeof(int));
+          for(j=0;j<8;j++)
+              *(*(matrix_error + i)+ j) = 0;
+      }
+
+
+   for(i=0;i<100;i++)
    {
        printf("%d\n",i);
 #ifdef CLC
@@ -33,7 +49,7 @@ void main(void){
 
  //Hamming
 #ifdef HAMMING
-          res = HAMM_encode(dadoOriginal,RAM_mem_ECC_Address);
+          res = HAMM_encode(dadoOriginal,RAM_mem_ECC_Address,matrix_error);
           dadoLido = HAMM_decode(RAM_mem_ECC_Address);
 #endif
          // printf("\nPalavra lida: %x\n",dadoLido);
